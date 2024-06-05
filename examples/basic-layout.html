@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Waitwhile Embed - Basic layout</title>
+  <script src="../dist/waitwhile-embed.js"></script>
+  <style>
+    html * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #wrap {
+      position: relative;
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      padding: 1em 0 1em 1em;
+      text-align: center;
+      text-transform: uppercase;
+      background: #112643;
+      color: #F9F7F3;
+      font-weight: 400;
+      font-size: 1.5em;
+      letter-spacing: .4em;
+      user-select: none;
+      overflow: hidden;
+      transition: all 1200ms ease-in-out;
+      border-bottom: 4px solid #EC87A1;
+
+      small {
+        display: block;
+        font-size: .5em;
+        margin-top: .5em;
+        opacity: .5;
+        letter-spacing: .4em;
+      }
+
+      .ww-num-waiting {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        font-size: 8px;
+        letter-spacing: .1em;
+      }
+    }
+
+    main {
+      margin: 0 auto;
+      padding: 40px 16px;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      color: #888E9A;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #112642;
+      padding: 1em 0;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 10px;
+      z-index: 3;
+      height: 100px;
+      user-select: none;
+      transition: all 1200ms ease-in-out;
+      overflow: hidden;
+      border-top: 4px solid #EC87A1;
+    }
+
+    #locales {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: 2em;
+
+      li {
+        cursor: pointer;
+
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+
+    .copy {
+      display: block;
+      margin-top: 1em;
+    }
+
+    #hero {
+      background: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOG85NG9rZmx0eW1lZHJ0M3JwNm5xdXd0aWxtNmxxNXlvb2d2bmMxayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohc0Ssl35GQxdMRoI/giphy.gif');
+      background-position: center;
+      height: 0;
+      transition: all 1200ms ease-in-out;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      h2 {
+        color: #fff;
+        font-size: 1.5em;
+        text-shadow: 0 0 1em 3em #000;
+        background: #000;
+        padding: 1em 2em;
+        border: 1px solid #fff;
+        border-style: none solid;
+      }
+    }
+
+    #fireworks {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    body.booked {
+      header {
+        height: 0;
+        padding: 0;
+        color: #000;
+        background: #000;
+      }
+
+      footer {
+        height: 0;
+        padding: 0;
+        color: #000;
+        background: #000;
+      }
+
+      #hero {
+        height: 250px;
+      }
+
+    }
+
+    [data-ww-slot] {
+      display: none;
+    }
+  </style>
+
+  <!-- Styles annotated with data-ww-css will be "injected" into the iFrame. -->
+  <style data-ww-css>
+    .magic {
+      margin: 0 auto;
+      border-radius: 50%;
+      animation: color-change 2s infinite alternate ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100px;
+      color: pink;
+      font-size: 4em;
+    }
+
+    @keyframes color-change {
+      0% {
+        scale: 0.8;
+        color: #162541;
+        background: #6FD8EE;
+      }
+
+      50% {
+        scale: 1;
+        color: #F9F7F3;
+        background: #162541;
+        rotate: 30deg;
+      }
+
+      100% {
+        scale: .4;
+        color: #162541;
+        background: #F6D95A;
+        rotate: -20deg;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="wrap">
+
+    <header>
+      business inc<small>waitwhile.com</small>
+      <div class="ww-num-waiting"></div>
+    </header>
+
+    <div data-ww-slot="registration--party-size--header">
+      <div class="magic">🦄</div>
+    </div>
+
+    <div id="hero">
+      <h2>This changes EVERYTHING</h2>
+    </div>
+
+    <main></main>
+
+    <footer>
+      <ul id="locales">
+        <li>Loading langauges...</li>
+      </ul>
+    </footer>
+
+    <div id="fireworks"></div>
+
+  </div>
+
+  <script type="module">
+    import {Fireworks} from 'https://esm.run/fireworks-js';
+
+    const elLanguageList = document.getElementById('locales');
+    const elNumWaiting = document.querySelectorAll('.ww-num-waiting')
+    const elMain = document.querySelectorAll('main')[0]
+
+    const waitwhile = Waitwhile.Embed({
+      locationId: 'widgetsignups',
+      showHeader: false,
+      templateElements: Waitwhile.compileTemplates(),
+      stylesheets: Waitwhile.compileStylesheets(),
+      onRouteChanged: ({path}) => {
+        if (path.includes('/visits/')) {
+          document.body.classList.add('booked');
+          const fireworks = new Fireworks(document.getElementById('fireworks'), {
+            gravity: 1.4,
+            opacity: 0.4,
+            autoresize: true,
+            acceleration: 1.00,
+          });
+
+          fireworks.start()
+        }
+      },
+      onLocalesAvailable: (locales) => {
+        const names = {
+          'en-US': 'English',
+          'sv-SE': 'Swedish',
+          'fr-FR': 'French',
+        }
+        elLanguageList.innerHTML = locales.map(
+          ({locale}) => `<li data-locale="${locale}">${names[locale] || locale}</li>`
+        ).join('');
+      },
+      onLocationStatusChanged: ({numWaiting}) => {
+        if (numWaiting) {
+          elNumWaiting.forEach(el => el.textContent = `${numWaiting} ${numWaiting > 0 ? 'people waiting' : 'No one waiting'}`);
+        }
+      },
+    })
+
+    waitwhile.render('main');
+
+    waitwhile.event.on(zoid.EVENT.RENDERED, () => {
+      console.log('Waitwhile: Rendered')
+    });
+
+    elLanguageList.addEventListener('click', (e) => {
+      const locale = e.target.dataset.locale;
+      waitwhile.updateProps({locale});
+    });
+  </script>
+
+</body>
+
+</html>

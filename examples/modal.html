@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Waitwhile Embed - Modal</title>
+  <script src="../dist/waitwhile-embed.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      font-size: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    article {
+      line-height: 1.5em;
+      max-width: 580px;
+      margin: 0 auto;
+      padding: 64px 0;
+      text-align: justify;
+      text-wrap: pretty;
+    }
+
+    #ww-modal {
+      width: 100%;
+      max-width: 771px;
+      min-height: 400px;
+      border-radius: 4px;
+      box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.4);
+      border: none;
+      background: #fff;
+      padding: 0;
+      padding-bottom: 24px;
+    }
+
+    #ww-modal::backdrop {
+      opacity: .8;
+      background-color: darkorange;
+      background-image: linear-gradient(130deg, #ff7a18,
+          #af002d 41.07%,
+          #319197 76.05%);
+    }
+
+    button {
+      background: #000;
+      color: #fff;
+      padding: 1em 2em;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        background: #333;
+      }
+    }
+
+    #loading-message {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+  <dialog id="ww-modal">
+    <div id="loading-message">Loading Waitwhile...</div>
+    <div id="waitwhile"></div>
+  </dialog>
+
+  <article>
+    <h1>Revolutionizing Queue Management</h1>
+    <p>In an era where time is of the essence, businesses are constantly seeking innovative solutions to enhance
+      customer experience and operational efficiency. Enter Waitwhile, a cutting-edge system designed to streamline
+      queueing and booking processes. Launched in 2021, Waitwhile has rapidly become a game-changer for businesses
+      across various industries, from retail to healthcare.</p>
+
+    <p>
+      <button id="showWaitwhileBtn">Try Waitwhile in a modal</button>
+    </p>
+
+
+    <h2>Efficient Queue Management</h2>
+    <p>Waitwhile’s primary feature is its robust queue management system. Gone are the days of customers standing in
+      long lines, uncertain of their wait time. With Waitwhile, businesses can create virtual queues, allowing customers
+      to join via their smartphones. Once in the virtual queue, customers receive real-time updates on their wait status
+      and estimated wait time, ensuring they are informed and engaged throughout the process.</p>
+
+    <h2>Seamless Booking Integration</h2>
+    <p>In addition to managing queues, Waitwhile excels in handling bookings. The system allows customers to schedule
+      appointments effortlessly through an intuitive interface. Businesses can customize booking parameters, such as
+      available time slots, services offered, and staff assignments, ensuring a seamless and efficient booking
+      experience. This integration significantly reduces the administrative burden on staff and minimizes the risk of
+      double bookings or scheduling errors.</p>
+
+    <h2>Real-Time Analytics and Insights</h2>
+    <p>One of Waitwhile’s standout features is its real-time analytics dashboard. Businesses can access comprehensive
+      data on customer wait times, peak hours, and service durations. This information is invaluable for optimizing
+      operations, allocating resources effectively, and enhancing overall customer satisfaction. With these insights,
+      businesses can make informed decisions that directly impact their bottom line.</p>
+
+    <h2>Customer Engagement and Feedback</h2>
+    <p>Waitwhile also emphasizes customer engagement. Through the system, businesses can send personalized messages to
+      customers, such as appointment reminders, promotional offers, and satisfaction surveys. This not only keeps
+      customers informed but also fosters a stronger connection between the business and its clientele. Collecting
+      feedback via the platform enables businesses to continuously improve their services based on direct customer
+      input.</p>
+
+    <h2>Scalability and Customization</h2>
+    <p>Designed with scalability in mind, Waitwhile caters to businesses of all sizes. Whether it’s a small boutique or
+      a large hospital, the system can be tailored to meet specific needs. Customizable features include branding
+      options, multi-language support, and integration with existing CRM systems. This flexibility ensures that
+      Waitwhile can grow alongside the business, adapting to evolving requirements and expanding operations.</p>
+
+    <h2>Security and Compliance</h2>
+    <p>Waitwhile places a high priority on security and compliance. The system is built with robust security measures to
+      protect sensitive customer data, ensuring compliance with regulations such as GDPR and HIPAA. This commitment to
+      security gives businesses and their customers peace of mind, knowing that their information is safe and secure.
+    </p>
+
+    <h2>Success Stories</h2>
+    <p>Since its launch, Waitwhile has garnered positive feedback from a diverse range of industries. Retailers have
+      reported reduced walkout rates and increased sales, healthcare providers have noted improved patient satisfaction,
+      and educational institutions have experienced more efficient student service management. These success stories
+      highlight Waitwhile’s versatility and effectiveness in enhancing operational efficiency and customer experience.
+    </p>
+
+    <h2>Conclusion</h2>
+    <p>As businesses continue to navigate the challenges of modern customer service, Waitwhile stands out as a
+      comprehensive solution for queueing and booking management. Its blend of innovative features, real-time insights,
+      and customizable options make it an invaluable tool for any organization looking to improve efficiency and enhance
+      customer satisfaction. In a world where time and experience are paramount, Waitwhile is leading the way in
+      transforming how businesses manage their queues and bookings.</p>
+  </article>
+
+  <script>
+    const elShowWaitwhileBtn = document.getElementById('showWaitwhileBtn');
+    const elWaitwhileModal = document.getElementById('ww-modal');
+    const elLoadingMessage = document.getElementById('loading-message')
+
+    const waitwhile = Waitwhile.Embed({
+      locationId: 'widgetsignups',
+    });
+
+    waitwhile.event.on(zoid.EVENT.RENDERED, () => {
+      elLoadingMessage.style.display = 'none';
+    });
+
+    elShowWaitwhileBtn.addEventListener('click', () => {
+      elWaitwhileModal.showModal()
+      waitwhile.render('#waitwhile');
+    });
+  </script>
+</body>
+
+</html>
