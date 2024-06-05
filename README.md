@@ -1,4 +1,4 @@
-Integrate [Waitwhile](https://waitwhile.com)'s queueing and booking registration flows seamlessly into any webpage with this JavaScript snippet.
+Integrate [Waitwhile](https://waitwhile.com)'s queueing and booking registration flows seamlessly into any page.
 
 ## Basic usage
 
