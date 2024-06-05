@@ -1,8 +1,14 @@
+# @waitwhile/waitwhile-embed
+
 Integrate [Waitwhile](https://waitwhile.com)'s queueing and booking registration flows seamlessly into any page.
 
-## Basic usage
+## Requirements
 
-1. Include the snippet.
+Public Waitwhile registration pages.
+
+## Usage
+
+1. Include the snippet (check for latest version in package.json).
 2. Create an instance of `Waitwhile.Embed`.
 3. Render it on the page using `instance.render()`.
 
