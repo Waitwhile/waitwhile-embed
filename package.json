@@ -1,9 +1,15 @@
 {
-  "name": "waitwhile-embed",
+  "name": "@waitwhile/waitwhile-embed",
   "version": "1.0.0",
-  "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Waitwhile/waitwhile-embed.git"
+  },
+  "keywords": "waitwhile",
+  "author": "Waitwhile",
+  "main": "dist/waitwhile-embed.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup -c --context window"
   },
   "dependencies": {
