@@ -94,6 +94,12 @@ declare global {
       width: false,
       height: true,
     },
+    attributes: {
+      iframe: {
+        allow: "geolocation",
+        scrolling: "no",
+      },
+    },
     url: ({
       props,
     }: {
