@@ -131,6 +131,23 @@
       }
     }
 
+    #booking-info {
+      position: fixed;
+      right: 160px;
+      top: 132px;
+      z-index: 99;
+      opacity: 0;
+      transform: translatey(16px);
+      transition: all 400ms ease-out;
+    }
+
+    .step-date {
+      #booking-info {
+        opacity: 1;
+        transform: translatey(0);
+      }
+    }
+
     #fireworks {
       position: fixed;
       top: 0;
@@ -220,7 +237,12 @@
     </div>
 
     <div id="hero">
-      <h2>This changes EVERYTHING</h2>
+      <h2>Fireworks!</h2>
+    </div>
+
+    <div id="booking-info">
+      <h2>Extra info</h2>
+      <p>Here's some additional details.</p>
     </div>
 
     <main></main>
@@ -258,6 +280,11 @@
           });
 
           fireworks.start()
+        }
+        if (path.includes('/time')) {
+          document.body.classList.add('step-date');
+        } else {
+          document.body.classList.remove('step-date');
         }
       },
       onLocalesAvailable: (locales) => {
