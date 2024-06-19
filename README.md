@@ -17,7 +17,7 @@ Public Waitwhile registration pages.
 <div id="waitwhile"></div>
 
 <!-- Include the snippet -->
-<script src="https://cdn.jsdelivr.net/npm/@waitwhile/waitwhile-embed@1.0.0/dist/waitwhile-embed.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@waitwhile/waitwhile-embed@1.1.0/dist/waitwhile-embed.min.js"></script>
 
 <!-- Create an instance of Waitwhile and render it on the page -->
 <script>
