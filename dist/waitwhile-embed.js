@@ -5118,6 +5118,10 @@
         type: "string",
         required: false
       },
+      prefill: {
+        type: "object",
+        required: false
+      },
       onLocalesAvailable: {
         type: "function",
         required: false
@@ -5156,12 +5160,17 @@
     url: ({
       props
     }) => {
-      const { host, locationId, publicVisitId } = props;
+      const { host, locationId, publicVisitId, prefill } = props;
       const root2 = hosts[host] || (typeof host === "string" ? host : hosts.production);
       if (publicVisitId) {
         return `${root2}/locations/${locationId}/visits/${publicVisitId}`;
       }
-      return `${root2}/locations/${locationId}`;
+      let query = "";
+      if (prefill) {
+        const params = new URLSearchParams(prefill);
+        query = `?${params.toString()}`;
+      }
+      return `${root2}/locations/${locationId}${query}`;
     }
   });
   const elementsToString = (selector, prop = "outerHTML") => {

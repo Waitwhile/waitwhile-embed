@@ -65,6 +65,10 @@ declare global {
         type: "string",
         required: false,
       },
+      prefill: {
+        type: "object",
+        required: false,
+      },
       onLocalesAvailable: {
         type: "function",
         required: false,
@@ -103,9 +107,15 @@ declare global {
     url: ({
       props,
     }: {
-      props: { host?: string; locationId: string; publicVisitId?: string };
+      props: {
+        host?: string;
+        locationId: string;
+        publicVisitId?: string;
+        prefill?: Record<string, any>;
+      };
     }) => {
-      const { host, locationId, publicVisitId } = props;
+      const { host, locationId, publicVisitId, prefill } = props;
+
       const root =
         hosts[host as keyof typeof hosts] ||
         (typeof host === "string" ? host : hosts.production);
@@ -114,7 +124,13 @@ declare global {
         return `${root}/locations/${locationId}/visits/${publicVisitId}`;
       }
 
-      return `${root}/locations/${locationId}`;
+      let query = "";
+      if (prefill) {
+        const params = new URLSearchParams(prefill);
+        query = `?${params.toString()}`;
+      }
+
+      return `${root}/locations/${locationId}${query}`;
     },
   });
 
