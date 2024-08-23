@@ -1,4 +1,4 @@
-import "zoid/dist/zoid.frame";
+import "@krakenjs/zoid/dist/zoid.frame";
 
 declare global {
   interface Window {
