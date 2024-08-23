@@ -12,8 +12,5 @@ export default {
     format: 'cjs',
     dir: 'dist',
   },
-  plugins: [
-    nodeResolve(),
-    esbuild(esbuildConfig)
-  ],
+  plugins: [nodeResolve(), esbuild(esbuildConfig)],
 };

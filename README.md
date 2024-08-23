@@ -23,7 +23,7 @@ Public Waitwhile registration pages.
 <script>
   const waitwhile = Waitwhile.Embed({
     locationId: 'WAITWHILE_LOCATION_ID',
-  })
+  });
 
   waitwhile.render('#waitwhile');
 </script>

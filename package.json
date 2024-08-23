@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "rollup -c -w --context window",
     "build": "rollup -c --context window",
-    "prettier": "npx prettier src --write"
+    "prettier": "npx prettier . --write"
   },
   "dependencies": {
     "@krakenjs/zoid": "^10.3.3"
