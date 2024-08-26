@@ -7,6 +7,7 @@ type ModalOpts = {
   confirmClose?: boolean;
   confirmMessage?: string;
   preload?: boolean;
+  modalOpenClass?: string;
 };
 
 declare global {
@@ -30,10 +31,6 @@ declare global {
   }
 }
 
-const MODAL_TEMPLATE = `
-  <div class="waitwhile-modal-content"></div>
-`;
-
 (function initWaitwhile(root) {
   if (!root || root.Waitwhile) {
     return;
@@ -46,6 +43,12 @@ const MODAL_TEMPLATE = `
       'Waitwhile requires zoid to be included on the page. See https://cdnjs.com/libraries/zoid.',
     );
   }
+
+  const MODAL_TEMPLATE = `
+    <div class="waitwhile-modal-content"></div>
+  `;
+
+  const MODAL_OPEN_CLASS = 'waitwhile-modal-open';
 
   const hosts = {
     production: 'https://waitwhile.com',
@@ -159,13 +162,18 @@ const MODAL_TEMPLATE = `
 
   let modalCount = 0;
 
-  const Modal = (
-    embedOpts: any,
-    modalOpts: ModalOpts = {
+  const Modal = (embedOpts: any, modalOpts: ModalOpts = {}) => {
+    const defaultModalOpts = {
       confirmClose: true,
       confirmMessage: 'Are you sure you want to close?',
-    },
-  ) => {
+      modalOpenClass: MODAL_OPEN_CLASS,
+    };
+
+    modalOpts = {
+      ...defaultModalOpts,
+      ...modalOpts,
+    };
+
     let isRendered = false;
     let id = modalOpts.id || `waitwhile-modal-${modalCount++}`;
     const embed = Embed(embedOpts);
@@ -187,11 +195,14 @@ const MODAL_TEMPLATE = `
         rect.left <= event.clientX &&
         event.clientX <= rect.left + rect.width;
       if (
-        !isInDialog &&
+        isInDialog &&
         (!modalOpts.confirmClose || window.confirm(modalOpts.confirmMessage))
       ) {
-        dialog.close();
+        close();
       }
+    });
+    dialog.addEventListener('close', () => {
+      document.body.classList.remove(modalOpts.modalOpenClass!);
     });
     document.body.append(dialog);
 
@@ -209,6 +220,7 @@ const MODAL_TEMPLATE = `
         renderEmbed();
       }
       dialog.showModal();
+      document.body.classList.add(modalOpts.modalOpenClass!);
     };
 
     const close = () => {

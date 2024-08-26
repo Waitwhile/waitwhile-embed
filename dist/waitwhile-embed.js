@@ -4820,9 +4820,22 @@
     } ]);
 }));
 
-const MODAL_TEMPLATE = `
-  <div class="waitwhile-modal-content"></div>
-`;
+var __defProp = Object.defineProperty;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
 (function initWaitwhile(root) {
   if (!root || root.Waitwhile) {
     return;
@@ -4833,6 +4846,10 @@ const MODAL_TEMPLATE = `
       "Waitwhile requires zoid to be included on the page. See https://cdnjs.com/libraries/zoid."
     );
   }
+  const MODAL_TEMPLATE = `
+    <div class="waitwhile-modal-content"></div>
+  `;
+  const MODAL_OPEN_CLASS = "waitwhile-modal-open";
   const hosts = {
     production: "https://waitwhile.com",
     development: "https://ww-static-public-dev.web.app"
@@ -4929,10 +4946,16 @@ const MODAL_TEMPLATE = `
     }
   });
   let modalCount = 0;
-  const Modal = (opts, id) => {
-    let rendered = false;
-    id = id || `waitwhile-modal-${modalCount++}`;
-    const embed = Embed(opts);
+  const Modal = (embedOpts, modalOpts = {}) => {
+    const defaultModalOpts = {
+      confirmClose: true,
+      confirmMessage: "Are you sure you want to close?",
+      modalOpenClass: MODAL_OPEN_CLASS
+    };
+    modalOpts = __spreadValues(__spreadValues({}, defaultModalOpts), modalOpts);
+    let isRendered = false;
+    let id = modalOpts.id || `waitwhile-modal-${modalCount++}`;
+    const embed = Embed(embedOpts);
     if (document.getElementById(id)) {
       throw new Error(`Modal with id ${id} already exists`);
     }
@@ -4940,20 +4963,32 @@ const MODAL_TEMPLATE = `
     dialog.setAttribute("id", id);
     dialog.setAttribute("class", "waitwhile-modal");
     dialog.innerHTML = MODAL_TEMPLATE;
+    dialog.addEventListener("click", (event) => {
+      var _a;
+      const rect = dialog.getBoundingClientRect();
+      const isInDialog = ((_a = event.target) == null ? void 0 : _a.tagName) === "DIALOG" && rect.top <= event.clientY && event.clientY <= rect.top + rect.height && rect.left <= event.clientX && event.clientX <= rect.left + rect.width;
+      if (isInDialog && (!modalOpts.confirmClose || window.confirm(modalOpts.confirmMessage))) {
+        close();
+      }
+    });
     dialog.addEventListener("close", () => {
-      console.log("close", embed, id);
+      document.body.classList.remove(modalOpts.modalOpenClass);
     });
     document.body.append(dialog);
+    const renderEmbed = () => {
+      embed.render(`#${id} .waitwhile-modal-content`);
+      isRendered = true;
+    };
     const show = () => {
       const dialog2 = document.getElementById(id);
       if (!dialog2) {
         return;
       }
-      if (!rendered) {
-        embed.render(`#${id} .waitwhile-modal-content`);
-        rendered = true;
+      if (!isRendered) {
+        renderEmbed();
       }
       dialog2.showModal();
+      document.body.classList.add(modalOpts.modalOpenClass);
     };
     const close = () => {
       const dialog2 = document.getElementById(id);
@@ -4962,6 +4997,9 @@ const MODAL_TEMPLATE = `
       }
       dialog2.close();
     };
+    if (modalOpts.preload) {
+      renderEmbed();
+    }
     return {
       embed,
       dialog: {
