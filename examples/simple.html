@@ -1,33 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Waitwhile Embed - Simple</title>
+    <style>
+      #waitwhile {
+        border: 1px dotted #c94c5a;
+      }
+    </style>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Waitwhile Embed - Simple</title>
-  <style>
-    #waitwhile {
-      border: 1px dotted #C94C5A;
-    }
-  </style>
-</head>
+  <body>
+    <!-- The div where the Waitwhile widget will be rendered -->
+    <div id="waitwhile"></div>
 
-<body>
-  <!-- The div where the Waitwhile widget will be rendered -->
-  <div id="waitwhile"></div>
+    <!-- Include the snippet -->
+    <script src="../dist/waitwhile-embed.js"></script>
 
-  <!-- Include the snippet -->
-  <script src="../dist/waitwhile-embed.js"></script>
-
-  <!-- Create an instance of Waitwhile and render it on the page -->
-  <script>
-    const waitwhile = Waitwhile.Embed({
-      locationId: 'widgetsignups',
-    })
-    waitwhile.render('#waitwhile');
-  </script>
-</body>
-
+    <!-- Create an instance of Waitwhile and render it on the page -->
+    <script>
+      const waitwhile = Waitwhile.Embed({
+        locationId: 'widgetsignups',
+      });
+      waitwhile.render('#waitwhile');
+    </script>
+  </body>
 </html>
