@@ -2,6 +2,13 @@ import '@krakenjs/zoid/dist/zoid.frame';
 
 type ZoidEmbed = any;
 
+type ModalOpts = {
+  id?: string;
+  confirmClose?: boolean;
+  confirmMessage?: string;
+  preload?: boolean;
+};
+
 declare global {
   interface Window {
     Waitwhile: {
@@ -9,8 +16,8 @@ declare global {
       compileTemplates: () => string[];
       compileStylesheets: () => string[];
       Modal: (
-        opts: any,
-        id?: string,
+        embedOpts: any,
+        modalOpts?: ModalOpts,
       ) => {
         embed: ZoidEmbed;
         dialog: {
@@ -152,10 +159,16 @@ const MODAL_TEMPLATE = `
 
   let modalCount = 0;
 
-  const Modal = (opts: any, id?: string) => {
-    let rendered = false;
-    id = id || `waitwhile-modal-${modalCount++}`;
-    const embed = Embed(opts);
+  const Modal = (
+    embedOpts: any,
+    modalOpts: ModalOpts = {
+      confirmClose: true,
+      confirmMessage: 'Are you sure you want to close?',
+    },
+  ) => {
+    let isRendered = false;
+    let id = modalOpts.id || `waitwhile-modal-${modalCount++}`;
+    const embed = Embed(embedOpts);
 
     if (document.getElementById(id)) {
       throw new Error(`Modal with id ${id} already exists`);
@@ -165,19 +178,35 @@ const MODAL_TEMPLATE = `
     dialog.setAttribute('id', id);
     dialog.setAttribute('class', 'waitwhile-modal');
     dialog.innerHTML = MODAL_TEMPLATE;
-    dialog.addEventListener('close', () => {
-      console.log('close', embed, id);
+    dialog.addEventListener('click', (event: MouseEvent) => {
+      const rect = dialog.getBoundingClientRect();
+      const isInDialog =
+        (event.target as HTMLElement)?.tagName === 'DIALOG' &&
+        rect.top <= event.clientY &&
+        event.clientY <= rect.top + rect.height &&
+        rect.left <= event.clientX &&
+        event.clientX <= rect.left + rect.width;
+      if (
+        !isInDialog &&
+        (!modalOpts.confirmClose || window.confirm(modalOpts.confirmMessage))
+      ) {
+        dialog.close();
+      }
     });
     document.body.append(dialog);
+
+    const renderEmbed = () => {
+      embed.render(`#${id} .waitwhile-modal-content`);
+      isRendered = true;
+    };
 
     const show = () => {
       const dialog = document.getElementById(id) as HTMLDialogElement;
       if (!dialog) {
         return;
       }
-      if (!rendered) {
-        embed.render(`#${id} .waitwhile-modal-content`);
-        rendered = true;
+      if (!isRendered) {
+        renderEmbed();
       }
       dialog.showModal();
     };
@@ -189,6 +218,10 @@ const MODAL_TEMPLATE = `
       }
       dialog.close();
     };
+
+    if (modalOpts.preload) {
+      renderEmbed();
+    }
 
     return {
       embed,
