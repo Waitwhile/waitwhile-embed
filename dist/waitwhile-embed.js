@@ -4836,11 +4836,11 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
-(function initWaitwhile(root) {
+const initWaitwhile = (root) => {
   if (!root || root.Waitwhile) {
     return;
   }
-  const zoid = root.zoid;
+  const { zoid } = root;
   if (!zoid) {
     throw new Error(
       "Waitwhile requires zoid to be included on the page. See https://cdnjs.com/libraries/zoid."
@@ -5000,84 +5000,80 @@ var __spreadValues = (a, b) => {
         scrolling: "no"
       }
     },
-    url: ({
-      props
-    }) => {
+    url: ({ props }) => {
       const { host, locationId, publicVisitId, prefill } = props;
       const root2 = hosts[host] || (typeof host === "string" ? host : hosts.production);
       if (publicVisitId) {
         return `${root2}/locations/${locationId}/visits/${publicVisitId}`;
       }
-      let query = "";
-      if (prefill) {
-        const params = new URLSearchParams(prefill);
-        query = `?${params.toString()}`;
-      }
+      const query = prefill ? `?${new URLSearchParams(prefill).toString()}` : "";
       return `${root2}/locations/${locationId}${query}`;
     }
   });
   let modalCount = 0;
   const Modal = (embedOpts, modalOpts = {}) => {
     const defaultModalOpts = {
+      id: `waitwhile-modal-${modalCount++}`,
       confirmClose: true,
       confirmMessage: "Are you sure you want to close?",
+      preload: false,
+      includeStyles: true,
       modalOpenClass: MODAL_OPEN_CLASS
     };
-    modalOpts = __spreadValues(__spreadValues({}, defaultModalOpts), modalOpts);
-    if (modalCount === 0) {
+    const options = __spreadValues(__spreadValues({}, defaultModalOpts), modalOpts);
+    if (options.includeStyles && modalCount === 1) {
       const styleSheet = document.createElement("style");
       styleSheet.textContent = MODAL_STYLES;
       document.head.appendChild(styleSheet);
     }
     let isRendered = false;
-    let id = modalOpts.id || `waitwhile-modal-${modalCount++}`;
-    const embed = Embed(embedOpts);
-    if (document.getElementById(id)) {
-      throw new Error(`Modal with id ${id} already exists`);
+    const instance = Embed(embedOpts);
+    if (document.getElementById(options.id)) {
+      throw new Error(`Modal with id ${options.id} already exists`);
     }
     const dialog = document.createElement("dialog");
-    dialog.setAttribute("id", id);
-    dialog.setAttribute("class", "waitwhile-modal");
+    dialog.id = options.id;
+    dialog.className = "waitwhile-modal";
     dialog.innerHTML = MODAL_MARKUP;
     dialog.addEventListener("click", (event) => {
       var _a;
       const rect = dialog.getBoundingClientRect();
-      const isInDialog = ((_a = event.target) == null ? void 0 : _a.tagName) === "DIALOG" && rect.top <= event.clientY && event.clientY <= rect.top + rect.height && rect.left <= event.clientX && event.clientX <= rect.left + rect.width;
-      if (isInDialog && (!modalOpts.confirmClose || window.confirm(modalOpts.confirmMessage))) {
+      const isOverlayClick = ((_a = event.target) == null ? void 0 : _a.tagName) === "DIALOG" && rect.top <= event.clientY && event.clientY <= rect.top + rect.height && rect.left <= event.clientX && event.clientX <= rect.left + rect.width;
+      if (isOverlayClick && (!options.confirmClose || window.confirm(options.confirmMessage))) {
         close();
       }
     });
     dialog.addEventListener("close", () => {
-      document.body.classList.remove(modalOpts.modalOpenClass);
+      document.body.classList.remove(options.modalOpenClass);
     });
     document.body.append(dialog);
-    const renderEmbed = () => {
-      embed.render(`#${id} .waitwhile-modal-content`);
+    const renderInstance = () => {
+      instance.render(`#${options.id} .waitwhile-modal-content`);
       isRendered = true;
     };
     const show = () => {
-      const dialog2 = document.getElementById(id);
-      if (!dialog2) {
-        return;
-      }
+      const modalElement = document.getElementById(
+        options.id
+      );
+      if (!modalElement) return;
       if (!isRendered) {
-        renderEmbed();
+        renderInstance();
       }
-      dialog2.showModal();
-      document.body.classList.add(modalOpts.modalOpenClass);
+      modalElement.showModal();
+      document.body.classList.add(options.modalOpenClass);
     };
     const close = () => {
-      const dialog2 = document.getElementById(id);
-      if (!dialog2) {
-        return;
-      }
-      dialog2.close();
+      const modalElement = document.getElementById(
+        options.id
+      );
+      if (!modalElement) return;
+      modalElement.close();
     };
-    if (modalOpts.preload) {
-      renderEmbed();
+    if (options.preload) {
+      renderInstance();
     }
     return {
-      embed,
+      instance,
       dialog: {
         show,
         close
@@ -5085,8 +5081,7 @@ var __spreadValues = (a, b) => {
     };
   };
   const elementsToString = (selector, prop = "outerHTML") => {
-    const elements = document.querySelectorAll(selector);
-    return Array.from(elements).map((el) => el[prop]).filter(Boolean);
+    return Array.from(document.querySelectorAll(selector)).map((el) => el[prop]).filter((content) => content !== null);
   };
   const compileTemplates = () => elementsToString("div[data-ww-slot]");
   const compileStylesheets = () => elementsToString("style[data-ww-css]", "innerHTML");
@@ -5096,4 +5091,7 @@ var __spreadValues = (a, b) => {
     compileTemplates,
     compileStylesheets
   };
-})(typeof window !== "undefined" ? window : void 0);
+};
+if (typeof window !== "undefined") {
+  initWaitwhile(window);
+}

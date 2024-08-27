@@ -1,42 +1,19 @@
 import '@krakenjs/zoid/dist/zoid.frame';
-
-type ZoidEmbed = any;
-
-type ModalOpts = {
-  id?: string;
-  confirmClose?: boolean;
-  confirmMessage?: string;
-  preload?: boolean;
-  modalOpenClass?: string;
-};
+import { ModalOptions, Waitwhile, WaitwhileEmbed, ZoidInstance } from './types';
 
 declare global {
   interface Window {
-    Waitwhile: {
-      Embed: ZoidEmbed;
-      compileTemplates: () => string[];
-      compileStylesheets: () => string[];
-      Modal: (
-        embedOpts: any,
-        modalOpts?: ModalOpts,
-      ) => {
-        embed: ZoidEmbed;
-        dialog: {
-          show: () => void;
-          close: () => void;
-        };
-      };
-    };
+    Waitwhile: Waitwhile;
     zoid: any;
   }
 }
 
-(function initWaitwhile(root) {
+const initWaitwhile = (root: Window | undefined): void => {
   if (!root || root.Waitwhile) {
     return;
   }
 
-  const zoid = root.zoid;
+  const { zoid } = root;
 
   if (!zoid) {
     throw new Error(
@@ -122,12 +99,12 @@ declare global {
   }
   `;
 
-  const hosts = {
+  const hosts: Record<string, string> = {
     production: 'https://waitwhile.com',
     development: 'https://ww-static-public-dev.web.app',
   };
 
-  const Embed = zoid.create({
+  const Embed: (opts: WaitwhileEmbed) => ZoidInstance = zoid.create({
     tag: 'waitwhile',
     props: {
       locationId: {
@@ -202,16 +179,7 @@ declare global {
         scrolling: 'no',
       },
     },
-    url: ({
-      props,
-    }: {
-      props: {
-        host?: string;
-        locationId: string;
-        publicVisitId?: string;
-        prefill?: Record<string, any>;
-      };
-    }) => {
+    url: ({ props }: { props: WaitwhileEmbed }) => {
       const { host, locationId, publicVisitId, prefill } = props;
 
       const root =
@@ -222,11 +190,9 @@ declare global {
         return `${root}/locations/${locationId}/visits/${publicVisitId}`;
       }
 
-      let query = '';
-      if (prefill) {
-        const params = new URLSearchParams(prefill);
-        query = `?${params.toString()}`;
-      }
+      const query = prefill
+        ? `?${new URLSearchParams(prefill).toString()}`
+        : '';
 
       return `${root}/locations/${locationId}${query}`;
     },
@@ -234,87 +200,101 @@ declare global {
 
   let modalCount = 0;
 
-  const Modal = (embedOpts: any, modalOpts: ModalOpts = {}) => {
-    const defaultModalOpts = {
+  const Modal = (
+    embedOpts: WaitwhileEmbed,
+    modalOpts: ModalOptions = {},
+  ): {
+    instance: ZoidInstance;
+    dialog: {
+      show: () => void;
+      close: () => void;
+    };
+  } => {
+    const defaultModalOpts: Required<ModalOptions> = {
+      id: `waitwhile-modal-${modalCount++}`,
       confirmClose: true,
       confirmMessage: 'Are you sure you want to close?',
+      preload: false,
+      includeStyles: true,
       modalOpenClass: MODAL_OPEN_CLASS,
     };
 
-    modalOpts = {
-      ...defaultModalOpts,
-      ...modalOpts,
-    };
+    const options = { ...defaultModalOpts, ...modalOpts };
 
-    if (modalCount === 0) {
+    if (options.includeStyles && modalCount === 1) {
       const styleSheet = document.createElement('style');
       styleSheet.textContent = MODAL_STYLES;
       document.head.appendChild(styleSheet);
     }
 
     let isRendered = false;
-    let id = modalOpts.id || `waitwhile-modal-${modalCount++}`;
-    const embed = Embed(embedOpts);
+    const instance = Embed(embedOpts);
 
-    if (document.getElementById(id)) {
-      throw new Error(`Modal with id ${id} already exists`);
+    if (document.getElementById(options.id)) {
+      throw new Error(`Modal with id ${options.id} already exists`);
     }
 
     const dialog = document.createElement('dialog');
-    dialog.setAttribute('id', id);
-    dialog.setAttribute('class', 'waitwhile-modal');
+    dialog.id = options.id;
+    dialog.className = 'waitwhile-modal';
     dialog.innerHTML = MODAL_MARKUP;
+
     dialog.addEventListener('click', (event: MouseEvent) => {
       const rect = dialog.getBoundingClientRect();
-      const isInDialog =
+      const isOverlayClick =
         (event.target as HTMLElement)?.tagName === 'DIALOG' &&
         rect.top <= event.clientY &&
         event.clientY <= rect.top + rect.height &&
         rect.left <= event.clientX &&
         event.clientX <= rect.left + rect.width;
+
       if (
-        isInDialog &&
-        (!modalOpts.confirmClose || window.confirm(modalOpts.confirmMessage))
+        isOverlayClick &&
+        (!options.confirmClose || window.confirm(options.confirmMessage))
       ) {
         close();
       }
     });
+
     dialog.addEventListener('close', () => {
-      document.body.classList.remove(modalOpts.modalOpenClass!);
+      document.body.classList.remove(options.modalOpenClass);
     });
+
     document.body.append(dialog);
 
-    const renderEmbed = () => {
-      embed.render(`#${id} .waitwhile-modal-content`);
+    const renderInstance = (): void => {
+      instance.render(`#${options.id} .waitwhile-modal-content`);
       isRendered = true;
     };
 
-    const show = () => {
-      const dialog = document.getElementById(id) as HTMLDialogElement;
-      if (!dialog) {
-        return;
-      }
+    const show = (): void => {
+      const modalElement = document.getElementById(
+        options.id,
+      ) as HTMLDialogElement | null;
+      if (!modalElement) return;
+
       if (!isRendered) {
-        renderEmbed();
+        renderInstance();
       }
-      dialog.showModal();
-      document.body.classList.add(modalOpts.modalOpenClass!);
+      modalElement.showModal();
+      document.body.classList.add(options.modalOpenClass);
     };
 
-    const close = () => {
-      const dialog = document.getElementById(id) as HTMLDialogElement;
-      if (!dialog) {
-        return;
-      }
-      dialog.close();
+    const close = (): void => {
+      const modalElement = document.getElementById(
+        options.id,
+      ) as HTMLDialogElement | null;
+      if (!modalElement) return;
+
+      modalElement.close();
     };
 
-    if (modalOpts.preload) {
-      renderEmbed();
+    if (options.preload) {
+      renderInstance();
     }
 
     return {
-      embed,
+      instance,
       dialog: {
         show,
         close,
@@ -322,16 +302,16 @@ declare global {
     };
   };
 
-  const elementsToString = (selector: string, prop = 'outerHTML') => {
-    const elements = document.querySelectorAll(selector);
-    return Array.from(elements)
-      .map((el) => el[prop as keyof typeof el] as unknown as string | null)
-      .filter(Boolean) as string[];
+  const elementsToString = (selector: string, prop = 'outerHTML'): string[] => {
+    return Array.from(document.querySelectorAll(selector))
+      .map((el) => el[prop as keyof Element] as string | null)
+      .filter((content): content is string => content !== null);
   };
 
-  const compileTemplates = () => elementsToString('div[data-ww-slot]');
+  const compileTemplates = (): string[] =>
+    elementsToString('div[data-ww-slot]');
 
-  const compileStylesheets = () =>
+  const compileStylesheets = (): string[] =>
     elementsToString('style[data-ww-css]', 'innerHTML');
 
   root.Waitwhile = {
@@ -340,4 +320,8 @@ declare global {
     compileTemplates,
     compileStylesheets,
   };
-})(typeof window !== 'undefined' ? window : undefined);
+};
+
+if (typeof window !== 'undefined') {
+  initWaitwhile(window);
+}
