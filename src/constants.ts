@@ -57,9 +57,9 @@ body.${MODAL_OPEN_CLASS} {
 .waitwhile-modal[open] {
   animation: ww-modal-in 350ms ease-out forwards;
   animation-delay: 150ms;
-  &::backdrop {
-    animation: ww-modal-o-in 250ms ease-out;
-  }
+}
+.waitwhile-modal[open]::backdrop {
+  animation: ww-modal-o-in 250ms ease-out;
 }
 
 .waitwhile-modal-content {

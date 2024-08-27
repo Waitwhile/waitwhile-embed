@@ -1,11 +1,16 @@
 import '@krakenjs/zoid/dist/zoid.frame';
-import { ModalOptions, Waitwhile, WaitwhileEmbed, ZoidInstance } from './types';
 import {
   HOSTS,
   MODAL_MARKUP,
   MODAL_OPEN_CLASS,
   MODAL_STYLES,
 } from './constants';
+import type {
+  ModalOptions,
+  Waitwhile,
+  WaitwhileEmbed,
+  ZoidInstance,
+} from './types';
 
 declare global {
   interface Window {

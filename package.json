@@ -12,14 +12,14 @@
   "scripts": {
     "dev": "rollup -c -w --context window",
     "build": "rollup -c --context window",
-    "prettier": "npx prettier . --write"
+    "check": "npx @biomejs/biome check --write ./src ./examples"
   },
   "dependencies": {
     "@krakenjs/zoid": "^10.3.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.8.3",
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "prettier": "3.3.3",
     "rollup": "^4.18.0",
     "rollup-plugin-esbuild": "^6.1.1"
   }
