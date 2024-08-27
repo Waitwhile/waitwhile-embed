@@ -144,13 +144,13 @@
     </article>
 
     <script>
-      const elShowWaitwhileBtn = document.getElementById('showWaitwhileBtn');
+      const buttonElement = document.getElementById('showWaitwhileBtn');
 
       const { dialog } = Waitwhile.Modal({
         locationId: 'widgetsignups',
       });
 
-      elShowWaitwhileBtn.addEventListener('click', () => {
+      buttonElement.addEventListener('click', () => {
         dialog.show();
       });
     </script>
