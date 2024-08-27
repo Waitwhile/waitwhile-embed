@@ -147,12 +147,7 @@
       const elShowWaitwhileBtn = document.getElementById('showWaitwhileBtn');
 
       const { dialog } = Waitwhile.Modal({
-        host: 'http://localhost:3000',
-        locationId: 'newnew',
-        prefill: {
-          firstname: 'John',
-          lastname: 'Doe',
-        },
+        locationId: 'widgetsignups',
       });
 
       elShowWaitwhileBtn.addEventListener('click', () => {
