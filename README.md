@@ -3,8 +3,8 @@
 This JavaScript widget allows you to seamlessly integrate [Waitwhile](https://waitwhile.com)’s powerful platform for queuing, appointments, and events directly into your website.
 Whether you choose to embed Waitwhile inline or in a modal, you can now offer your customers a streamlined experience for managing their interactions with your business.
 
-By embedding Waitwhile, you can create and manage customer journeys at scale, right from your own website.
-This documentation will guide you through the process of implementing the Waitwhile Embed Widget, allowing you to leverage its full potential in just minutes.
+By embedding Waitwhile, you can create and manage customer journeys at scale, all from your website.
+This [documentation](https://waitwhile-embed.web.app/getting-started/) will walk you through the steps to implement the Waitwhile Embed Widget, enabling you to unlock its full potential in just minutes.
 
 ## Requirements
 
