@@ -15,7 +15,8 @@
     "check": "npx @biomejs/biome check --write ./src ./examples"
   },
   "dependencies": {
-    "@krakenjs/zoid": "^10.3.3"
+    "@krakenjs/zoid": "^10.3.3",
+    "rollup-plugin-dotenv": "^0.5.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",

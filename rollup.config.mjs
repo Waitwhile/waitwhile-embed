@@ -1,5 +1,6 @@
 import esbuild from 'rollup-plugin-esbuild';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import dotenv from 'rollup-plugin-dotenv'
 
 const esbuildConfig = {
   target: 'es2017',
@@ -12,5 +13,5 @@ export default {
     format: 'cjs',
     dir: 'dist',
   },
-  plugins: [nodeResolve(), esbuild(esbuildConfig)],
+  plugins: [dotenv(), nodeResolve(), esbuild(esbuildConfig)],
 };
