@@ -47,6 +47,10 @@ const initWaitwhile = (root: Window | undefined): void => {
         queryParam: true,
         required: false,
       },
+      mode: {
+        type: 'string',
+        required: false,
+      },
       locale: {
         type: 'string',
         required: false,
@@ -122,7 +126,13 @@ const initWaitwhile = (root: Window | undefined): void => {
         ? `?${new URLSearchParams(prefill).toString()}`
         : '';
 
-      return `${root}/locations/${locationId}${query}`;
+      const mode = props.mode === 'display-waitlist' ? 'display-waitlist' : 'registration';
+
+      if (mode === 'registration') {
+        return `${root}/locations/${locationId}${query}`;
+      } else {
+        return `${root}/locations/${locationId}/waitlist${query}`;
+      }
     },
   });
 
