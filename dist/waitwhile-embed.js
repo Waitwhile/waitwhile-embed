@@ -5012,12 +5012,10 @@ const initWaitwhile = (root) => {
         return `${root2}/locations/${locationId}/visits/${publicVisitId}`;
       }
       const query = prefill ? `?${new URLSearchParams(prefill).toString()}` : "";
-      const mode = props.mode === "display-waitlist" ? "display-waitlist" : "registration";
-      if (mode === "registration") {
-        return `${root2}/locations/${locationId}${query}`;
-      } else {
+      if (props.mode === "display-waitlist") {
         return `${root2}/locations/${locationId}/waitlist${query}`;
       }
+      return `${root2}/locations/${locationId}${query}`;
     }
   });
   let modalCount = 0;

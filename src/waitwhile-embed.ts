@@ -126,13 +126,10 @@ const initWaitwhile = (root: Window | undefined): void => {
         ? `?${new URLSearchParams(prefill).toString()}`
         : '';
 
-      const mode = props.mode === 'display-waitlist' ? 'display-waitlist' : 'registration';
-
-      if (mode === 'registration') {
-        return `${root}/locations/${locationId}${query}`;
-      } else {
+      if (props.mode === 'display-waitlist') {
         return `${root}/locations/${locationId}/waitlist${query}`;
       }
+      return `${root}/locations/${locationId}${query}`;
     },
   });
 
