@@ -12,6 +12,7 @@ export interface ModalOptions {
 }
 
 export interface WaitwhileEmbed {
+  mode?: 'registration' | 'display-waitlist';
   locationId: string;
   publicVisitId?: string;
   kiosk?: boolean;

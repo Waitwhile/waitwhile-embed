@@ -4941,6 +4941,10 @@ const initWaitwhile = (root) => {
         queryParam: true,
         required: false
       },
+      mode: {
+        type: "string",
+        required: false
+      },
       locale: {
         type: "string",
         required: false
@@ -5008,7 +5012,12 @@ const initWaitwhile = (root) => {
         return `${root2}/locations/${locationId}/visits/${publicVisitId}`;
       }
       const query = prefill ? `?${new URLSearchParams(prefill).toString()}` : "";
-      return `${root2}/locations/${locationId}${query}`;
+      const mode = props.mode === "display-waitlist" ? "display-waitlist" : "registration";
+      if (mode === "registration") {
+        return `${root2}/locations/${locationId}${query}`;
+      } else {
+        return `${root2}/locations/${locationId}/waitlist${query}`;
+      }
     }
   });
   let modalCount = 0;
