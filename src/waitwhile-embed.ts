@@ -60,6 +60,11 @@ const initWaitwhile = (root: Window | undefined): void => {
         required: false,
         default: () => true,
       },
+      disableFormCache: {
+        type: 'boolean',
+        required: false,
+        default: () => false,
+      },
       templateElements: {
         type: 'array',
         required: false,
