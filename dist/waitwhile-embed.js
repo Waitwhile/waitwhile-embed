@@ -4954,6 +4954,11 @@ const initWaitwhile = (root) => {
         required: false,
         default: () => true
       },
+      disableFormCache: {
+        type: "boolean",
+        required: false,
+        queryParam: true
+      },
       templateElements: {
         type: "array",
         required: false
