@@ -61,3 +61,27 @@ Public Waitwhile registration pages.
 ```
 
 See the `/examples` directory for more examples.
+
+## Contribute
+
+We welcome contributions! If you have ideas for new features or spot any bugs, please [create an issue](https://github.com/Waitwhile/waitwhile-embed/issues/new).
+
+Feel free to submit pull requests as well. Make sure to follow the contribution guidelines outlined below.
+
+### Deploying a New Version
+
+The following instructions are for users listed as owners of the npm package. To check ownership, run `npm owner ls`.
+
+1. Build the project:  
+   `npm run build`
+
+1. Update the package version (use semver `major`, `minor`, or `patch`):  
+   `npm version [major | minor | patch]`
+
+1. Commit your changes and push them, including the tag:  
+   `git push && git push --tags`
+
+1. Publish the new version to npm:  
+   `npm publish`
+
+1. Update docs in [Waitwhile/waitwhile-embed-docs](https://github.com/Waitwhile/waitwhile-embed-docs).
