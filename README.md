@@ -66,11 +66,13 @@ See the `/examples` directory for more examples.
 
 We welcome contributions! If you have ideas for new features or spot any bugs, please [create an issue](https://github.com/Waitwhile/waitwhile-embed/issues/new).
 
-Feel free to submit pull requests as well. Make sure to follow the contribution guidelines outlined below.
+Feel free to submit pull requests as well.
 
 ### Deploying a New Version
 
-The following instructions are for users listed as owners of the npm package. To check ownership, run `npm owner ls`.
+The following instructions are for users listed as owners of the npm package.
+
+To check ownership, run `npm owner ls`.
 
 1. Build the project:  
    `npm run build`
