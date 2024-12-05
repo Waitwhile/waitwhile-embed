@@ -4824,6 +4824,7 @@ const MODAL_MARKUP = `
   <div class="waitwhile-modal-content"></div>
 `;
 const MODAL_OPEN_CLASS = "waitwhile-modal-open";
+const MODAL_CLOSE_SELECTOR = ".waitwhile-modal-close";
 const MODAL_STYLES = `
 @keyframes ww-modal-in {
   from {
@@ -4883,8 +4884,8 @@ body.${MODAL_OPEN_CLASS} {
 }
 
 .waitwhile-modal-content {
-  margin: 5% auto;
-  margin: 5vh auto;
+  margin: max(5%, 48px) auto;
+  margin: max(5vh, 48px) auto;
   padding: 16px 16px 48px 16px;
   width: 100%;
   max-width: 771px;
@@ -5031,7 +5032,8 @@ const initWaitwhile = (root) => {
       confirmMessage: "Are you sure you want to close?",
       preload: false,
       includeStyles: true,
-      modalOpenClass: MODAL_OPEN_CLASS
+      modalOpenClass: MODAL_OPEN_CLASS,
+      dialogInnerHTML: MODAL_MARKUP
     };
     const options = __spreadValues(__spreadValues({}, defaultModalOpts), modalOpts);
     if (options.includeStyles && modalCount === 1) {
@@ -5047,7 +5049,7 @@ const initWaitwhile = (root) => {
     const dialog = document.createElement("dialog");
     dialog.id = options.id;
     dialog.className = "waitwhile-modal";
-    dialog.innerHTML = MODAL_MARKUP;
+    dialog.innerHTML = options.dialogInnerHTML;
     dialog.addEventListener("click", (event) => {
       var _a;
       const rect = dialog.getBoundingClientRect();
@@ -5056,6 +5058,14 @@ const initWaitwhile = (root) => {
         close();
       }
     });
+    for (const closeButton of dialog.querySelectorAll(MODAL_CLOSE_SELECTOR)) {
+      closeButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!options.confirmClose || window.confirm(options.confirmMessage)) {
+          close();
+        }
+      });
+    }
     dialog.addEventListener("close", () => {
       document.body.classList.remove(options.modalOpenClass);
     });
