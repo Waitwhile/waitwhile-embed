@@ -1,6 +1,7 @@
 import '@krakenjs/zoid/dist/zoid.frame';
 import {
   HOSTS,
+  MODAL_CLOSE_SELECTOR,
   MODAL_MARKUP,
   MODAL_OPEN_CLASS,
   MODAL_STYLES,
@@ -196,6 +197,15 @@ const initWaitwhile = (root: Window | undefined): void => {
         close();
       }
     });
+
+    for (const closeButton of dialog.querySelectorAll(MODAL_CLOSE_SELECTOR)) {
+      closeButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!options.confirmClose || window.confirm(options.confirmMessage)) {
+          close();
+        }
+      });
+    }
 
     dialog.addEventListener('close', () => {
       document.body.classList.remove(options.modalOpenClass);

@@ -4,6 +4,8 @@ export const MODAL_MARKUP = `
 
 export const MODAL_OPEN_CLASS = 'waitwhile-modal-open';
 
+export const MODAL_CLOSE_SELECTOR = '.waitwhile-modal-close';
+
 export const MODAL_STYLES = `
 @keyframes ww-modal-in {
   from {
