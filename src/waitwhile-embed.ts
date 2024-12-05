@@ -1,6 +1,7 @@
 import '@krakenjs/zoid/dist/zoid.frame';
 import {
   HOSTS,
+  MODAL_CLOSE_SELECTOR,
   MODAL_MARKUP,
   MODAL_OPEN_CLASS,
   MODAL_STYLES,
@@ -157,6 +158,7 @@ const initWaitwhile = (root: Window | undefined): void => {
       preload: false,
       includeStyles: true,
       modalOpenClass: MODAL_OPEN_CLASS,
+      dialogInnerHTML: MODAL_MARKUP,
     };
 
     const options = { ...defaultModalOpts, ...modalOpts };
@@ -177,7 +179,7 @@ const initWaitwhile = (root: Window | undefined): void => {
     const dialog = document.createElement('dialog');
     dialog.id = options.id;
     dialog.className = 'waitwhile-modal';
-    dialog.innerHTML = MODAL_MARKUP;
+    dialog.innerHTML = options.dialogInnerHTML;
 
     dialog.addEventListener('click', (event: MouseEvent) => {
       const rect = dialog.getBoundingClientRect();
@@ -195,6 +197,15 @@ const initWaitwhile = (root: Window | undefined): void => {
         close();
       }
     });
+
+    for (const closeButton of dialog.querySelectorAll(MODAL_CLOSE_SELECTOR)) {
+      closeButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!options.confirmClose || window.confirm(options.confirmMessage)) {
+          close();
+        }
+      });
+    }
 
     dialog.addEventListener('close', () => {
       document.body.classList.remove(options.modalOpenClass);
