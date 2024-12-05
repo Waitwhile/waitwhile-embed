@@ -9,6 +9,7 @@ export interface ModalOptions {
   preload?: boolean;
   includeStyles?: boolean;
   modalOpenClass?: string;
+  dialogInnerHTML?: string;
 }
 
 export interface WaitwhileEmbed {
