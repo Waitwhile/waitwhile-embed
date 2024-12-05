@@ -63,8 +63,8 @@ body.${MODAL_OPEN_CLASS} {
 }
 
 .waitwhile-modal-content {
-  margin: 5% auto;
-  margin: 5vh auto;
+  margin: max(5%, 48px) auto;
+  margin: max(5vh, 48px) auto;
   padding: 16px 16px 48px 16px;
   width: 100%;
   max-width: 771px;
