@@ -4852,6 +4852,11 @@ body.${MODAL_OPEN_CLASS} {
   pointer-events: none;
 }
 
+.waitwhile-modal,
+.waitwhile-modal * {
+  box-sizing: border-box;
+}
+
 .waitwhile-modal {
   pointer-events: all;
   position: fixed;
@@ -4888,7 +4893,7 @@ body.${MODAL_OPEN_CLASS} {
   margin: max(5vh, 48px) auto;
   padding: 16px 16px 48px 16px;
   width: 100%;
-  max-width: 771px;
+  max-width: 800px;
   min-height: 400px;
   border-radius: 4px;
   box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
