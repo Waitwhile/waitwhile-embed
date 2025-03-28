@@ -6,6 +6,8 @@ Whether you choose to embed Waitwhile inline or in a modal, you can now offer yo
 By embedding Waitwhile, you can create and manage customer journeys at scale, all from your website.
 This [documentation](https://waitwhile-embed.web.app/getting-started/) will walk you through the steps to implement the Waitwhile Embed Widget, enabling you to unlock its full potential in just minutes.
 
+[![](https://data.jsdelivr.com/v1/package/npm/@waitwhile/waitwhile-embed/badge)](https://www.jsdelivr.com/package/npm/@waitwhile/waitwhile-embed)
+
 ## Requirements
 
 Public Waitwhile registration pages.
